@@ -245,6 +245,13 @@
 			android:summary="@string/pref_shiftfkeys_summary"
 			android:defaultValue="false"
 			/>
+
+		<CheckBoxPreference
+			android:key="backAsEscape"
+			android:title="@string/pref_backescape_title"
+			android:summary="@string/pref_backescape_summary"
+			android:defaultValue="false"
+			/>
 	</PreferenceCategory>
 		
 	<PreferenceCategory

@@ -100,6 +100,7 @@ public class TerminalKeyListener implements OnKeyListener, OnSharedPreferenceCha
     private boolean xperiaProFixes;
 
     private boolean hardKeyboard = false;
+    private boolean backHeld = false;
 
     private int metaState = 0;
 
@@ -157,6 +158,16 @@ public class TerminalKeyListener implements OnKeyListener, OnSharedPreferenceCha
             final boolean hardKeyboardHidden = manager.hardKeyboardHidden;
             // Ignore all key-up events except for the special keys
             if (event.getAction() == KeyEvent.ACTION_UP) {
+            	if (prefs.getBoolean("backAsEscape", false) && keyCode == KeyEvent.KEYCODE_BACK) {
+					if (backHeld) {
+						backHeld = false;
+						return false;
+					} else {
+						sendEscape();
+						return true;
+					}
+				}
+
                 // There's nothing here for virtual keyboard users.
                 if (!hardKeyboard || (hardKeyboard && hardKeyboardHidden))
                     return false;
@@ -467,6 +478,11 @@ public class TerminalKeyListener implements OnKeyListener, OnSharedPreferenceCha
 
             // look for special chars
             switch(keyCode) {
+            case KeyEvent.KEYCODE_BACK:
+                if (prefs.getBoolean("backAsEscape", false) && event.getRepeatCount() > 0) {
+                    backHeld = true;
+                }
+                return false;
             case KEYCODE_ESCAPE:
                 sendEscape();
                 return true;
